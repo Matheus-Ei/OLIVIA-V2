@@ -4,10 +4,8 @@
 -Deletar as pastas e arquivos inuteis de dentro do código
 
 ## Futuras Mudanças para Adicionar no Assistente
-<<ASSISTENTE PESSOAL>>
-
 {MODOS}
--Modo de emergencia
+-Modo de emergencia \n
 -Modos especificos para diferentes situações
 
 {JANELAS DO WINDOWS E WEB}
