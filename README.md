@@ -10,7 +10,7 @@
 - Ter Python Instalado
 - Instalar o Ambiente de Execução por meio do Arquivo "requirements.txt"
   - Abra o CMD na Pasta do Arquivo "requirements.txt"
-  - Execute o Comando: pip install -r requirements.txt
+  - Execute o Comando: `pip install -r requirements.txt`
 
 
 ## Futuras Funcionalidades para Adicionar no Assistente
