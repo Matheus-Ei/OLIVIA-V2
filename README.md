@@ -5,64 +5,93 @@
 
 ## Futuras Mudanças para Adicionar no Assistente
 **MODOS:**
-- Modo de emergencia
-- Modos especificos para diferentes situações
+- Emergencia
+- Modo Jarvis
+  - Quando ativado o assistente só responde quando na frase falada há a palavra "Jarvis"
+- Modo Música
+  - Quando ativado o assistente só responde a comandos relacionados a música
+- Modos Especificos para Diferentes Situações
 
 
 **JANELAS DO WINDOWS E WEB:**
-- Gerenciamento de janelas 
-- Sistema de pesquisas no google
-- Sistema de envio de emails
-- Sistema de previsão do tempo
-- Sistema sobre noticias e atualidades
+- Gerenciamento de Janelas 
+- Pesquisas no Google, Wikipedia, Youtube, etc...
+- Envio de Emails
+- Previsão do Tempo
+- Noticias e Atualidades
 
 
 **RECONHECIMENTO E REPRODUÇÃO DE FALA:**
-- reconhecimento de objetos por meio de uma camera
+- Reconhecimento de Objetos por Imagem
+- Reconhecimento de Voz
+  - Rápido e Preciso
+- Reconhecimento Facial de Segurança
+- Texto para Fala
+  - Rápida e sem Qualidade
+  - Lenta mas com Qualidade
+
+
+**IA**
+- Integração com a OpenAI
+  - GPT 3.5
+  - Geração de Imagem
 
 
 **BANCO DE DADOS:**
-- sistema de calendarios e agenda por meio de banco de dados
-- sistema de listas por meio de banco de dados
-- sistema que faz a gestão das finanças do usuario por meio de um banco de dados
-
-
-**ARQUIVOS:**
-- sistema que procura arquivos com determinado nome
-- sistema de gerenciamento de arquivos
+- Sistema de Calendarios e Agendamentos
+  - Pode Inserir Compromissos
+  - Pode Verificar os Compromisso
+  - Pode Deletar compromissos Criados caso Ja Tenham passado da Data Marcada ou se o Usuario Pedir
+  - Avisa com Notificações quais Compromissos Estão Perto de Expirar ou Ja Expiraram
+- Sistema de Listas
+  - Pode Inserir Novas Listas
+  - Pode Verificar as Listas
+  - Pode Deletar Listas Criadas se o Usuario Pedir
 
 
 **GUI E INTERFACE:**
-- GUI para a assistente
-- sistema que faz barras aumentarem e diminuirem quando a assistente fala e quando o assistido fala
-- sistema dentro da gui que tem uma area para executar comandos e pedidos
+- GUI Principal
+- GUI de Inicialização
+- GUI de Fechamento
+- GUI do MAPS
+- GUI dos Compromissos e Listas
+- GUI para Finanças
+- GUI para pesquisas
 
 
 **IMAGENS:**
-- sistema de geração, edição e variedade de imagens por inteligencia artificial
+- Geração de Imagens
+- Edição de Imagens
+- Variação de Imagens
 
 
 **AUDIOS E VIDEOS:**
-- um sistema que reproduz as musicas, audios e videos que o usuario pede e as gerencia
-- um sistema de gravação de voz e video automatico
+- Reprodução e Gerenciamento das Musicas, Audios e Videos
+- Gravação de Audio e Video Automatizado
+- Reprodução e Gerenciamento de Musicas e Podcasts do Spotfy
 
 
 **REDE E COMPUTADOR:**
-- sistema que mede as caracteristicas da rede no momento como ping e taxa de download e upload
-- sistema que mede como o computador está, como a ram sendo usada e o uso do hd
+- Leitura das Caracteristicas da Rede
+  - Taxa de Download e Upload
+  - Ping
+- Leitura das Caracteristidas do Computador
+  - Uso da RAM
+  - Uso do HD
+  - Temperatura do Processador
 
 
 **ARDUINO:**
-- sistema de ligar e desligar a luz por meio de uma integração com arduino
-- sistema de trancar e destrancar a porta por meio de uma integração com arduino
-- sistema de alerta de movimento por meio de arduino
-- sistema que liga e desliga refrigeradores e aquecedores com base na temperatura do ambiente por meio de arduino
+- Gerenciamento de Iluminação
+- Sistema de Tanca e Chaveameto com Arduino
+- Alerta de Movimento
+- Controle de Temperatura
 
 
 **CONVERSÕES E TRADUÇÕES:**
-- sistema de conversões
-- sistema de traduções
+- Conversões de Unidades
+- Traduções
 
 
 **OUTROS:**
-- sistema que imprime arquivos automaticamente
+- Gerenciamento de Impressões em 2D
