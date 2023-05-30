@@ -3,7 +3,15 @@
 - Seccionar as funções de dentro do código principal para diferentes arquivos e importa-los como classes
 - Deletar as pastas e arquivos inuteis de dentro do código
 
-## Futuras Mudanças para Adicionar no Assistente
+
+## Requisitos para usar o Assistente:
+- 01 Notebook ou PC
+- Sistema Operacional Windows
+- Ter Python Instalado
+- Instalar o Ambiente de Execução por meio do Arquivo "resquirements.txt"
+
+
+## Futuras Funcionalidades para Adicionar no Assistente
 **MODOS:**
 - Emergencia
 - Modo Jarvis
@@ -31,7 +39,7 @@
   - Lenta mas com Qualidade
 
 
-**IA**
+**IA:**
 - Integração com a OpenAI
   - GPT 3.5
   - Geração de Imagem
@@ -63,6 +71,12 @@
 - Geração de Imagens
 - Edição de Imagens
 - Variação de Imagens
+
+
+**LOCALIZAÇÃO:**
+- Navegação Assistida
+- Recomendação de Lugares na Região
+- Pede Opiniões quando nota que você passou em algum Lugar
 
 
 **AUDIOS E VIDEOS:**
