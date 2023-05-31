@@ -36,11 +36,13 @@ import json
 
 
 # Classes Criadas
-import Classes.Voices
-import Classes.SisSons
+import Classes.voices.Voices
+import Classes.reproduzir_som.reproduzir_som
 import Classes.ReconhecimentoFacial.ReconhecimentoFacial
-import Classes.Spotfy
-import Classes.reproduzir_gif
+import Classes.spotfy.Spotfy
+import Classes.reproduzir_gif.reproduzir_gif
+import Classes.senhas.senhas
+import Classes.prev_tempo.clima
 
 
 
@@ -256,11 +258,11 @@ def code():
         # Inicializa o mecanismo de síntese de voz
         engine = pyttsx3.init()
         # Sintetiza o texto
-        engine.save_to_file(texto, "data.mp3")
+        engine.save_to_file(texto, "Sons/data.mp3")
         engine.setProperty("rate", 400)  # Aumenta a velocidade em 50%
         engine.runAndWait()
         # Carrega o áudio gerado
-        audio = AudioSegment.from_wav("data.mp3")
+        audio = AudioSegment.from_wav("Sons/data.mp3")
         # Ajusta o volume (por exemplo, 6 dB para aumentar em 6 decibéis)
         volume_adjustment = 6
         audio = audio + volume_adjustment
@@ -281,7 +283,7 @@ def code():
 
     print("<Conectando com o banco de dados>")
     # Definir a string de conexão com o banco de dados do Access
-    conn_str = r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\t4iga\OneDrive\Projetos\Programação\Assistente_Pessoal\jar.accdb;'
+    conn_str = r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Banco_de_dados\jar.accdb;'
     conn = pyodbc.connect(conn_str)
     cursor = conn.cursor()
     print("<Banco de dados conectado>")
@@ -390,8 +392,7 @@ def code():
                     if audio_tratado == "ativar" or audio_tratado=="acorde" or audio_tratado=="acordar":
                         print("<<<--------------->>>")
                         print(audio_tratado)
-                        Classes.Voices.speak("Ativando")
-                        Classes.SisSons.datv_soneca_sound()
+                        Classes.voices.Voices.speak("Ativando")
                         print("<<<--------------->>>")     
                         loop = 2
                     else:
@@ -438,38 +439,7 @@ def code():
         server.quit()
 
 
-    # Faz a Previsão do Tempo
-    def previsao_do_tempo():
-        # Insira sua chave da API do OpenWeatherMap
-        API_KEY = '2537c1c37c801829837044d807c5f94d'
-        
-        # Insira o nome da cidade para a qual deseja obter a previsão do tempo
-        cidade = 'Chapeco'
-
-        # Monta a URL para a chamada da API
-        url = f'http://api.openweathermap.org/data/2.5/weather?q={cidade}&appid={API_KEY}'
-
-        # Faz a chamada da API
-        response = requests.get(url)
-        # Verifica se a chamada foi bem-sucedida
-        data = json.loads(response.text)
-        
-        # Extrai as informações relevantes da resposta da API
-        temperatura = data['main']['temp']
-        descricao = data['weather'][0]['description']
-
-        # Exibe a previsão do tempo
-        print(f'Previsão do tempo para {cidade}:')
-        print(f'Temperatura: {temperatura}°C')
-        print(f'Descrição: {descricao}')
-
-
-
-    # Gerar Senha
-    def gerar_senha(tamanho):
-        caracteres = string.ascii_letters + string.digits + string.punctuation
-        senha = ''.join(random.choice(caracteres) for _ in range(tamanho))
-        return senha
+    
 
 
     #Abre o microfone pra captura
@@ -480,7 +450,7 @@ def code():
         print("<Ajustando o ruido do ambiente>")
         r.adjust_for_ambient_noise(source, duration=3)
         print("<Ruido do ambiente ajustado>")
-        Classes.SisSons.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
+        Classes.reproduzir_som.reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
         while True:
             print("Ouvindo...\n")
             try:
@@ -502,8 +472,8 @@ def code():
                     if consulta_db('modo soneca'):
                         retorno = "Ativando o modo soneca"
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
-                        Classes.SisSons.atv_soneca_sound()
+                        Classes.voices.Voices.speak(retorno)
+                        Classes.reproduzir_som.reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
                         print("------------")
                         print("Modo Soneca")
                         print("------------")
@@ -516,7 +486,7 @@ def code():
                         modo_jarvis = ""
                         resposta_db("desativar modo jarvis")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
 
 
 
@@ -524,14 +494,14 @@ def code():
                         modo_jarvis = "jarvis"
                         resposta_db("modo jarvis")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
 
 
                         
                     # Gera imagens com base nas descrições do usuario
                     elif consulta_db('modo geracao de imagem'):
                         openai.api_key = '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'
-                        Classes.Voices.speak("Descreva a imagem que você deseja Gerar")
+                        Classes.voices.Voices.speak("Descreva a imagem que você deseja Gerar")
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
                             audios = r.listen(source)
@@ -540,7 +510,7 @@ def code():
                             print(audio_tratados)
                         except:
                             print("Deu um Erro!!")
-                        Classes.Voices.speak("Gerando Imagem")
+                        Classes.voices.Voices.speak("Gerando Imagem")
                         response = openai.Image.create(
                         prompt = "Imagem com o estilo cartoon realista e meio aquarela e criativa sobre: " + audio_tratados,
                         n=1,
@@ -551,7 +521,7 @@ def code():
                         # Abre o link no navegador padrão
                         retorno = "Abrindo a Imagem Gerada"
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         webbrowser.open(image_url)
 
 
@@ -573,12 +543,12 @@ def code():
                                 caminho = aplicativos[atalho]
                                 subprocess.Popen(caminho)
                                 print(f"Aplicativo '{atalho}' aberto.")
-                                Classes.Voices.speak("Abrindo " + atalho)
+                                Classes.voices.Voices.speak("Abrindo " + atalho)
                             else:
                                 print(f"Atalho '{atalho}' não encontrado.")
-                                Classes.Voices.speak(atalho + "Não encontrado")
+                                Classes.voices.Voices.speak(atalho + "Não encontrado")
                         # Pede qual aplicativo deseja abrir
-                        Classes.Voices.speak("Qual aplicativo voce deseja abrir?")
+                        Classes.voices.Voices.speak("Qual aplicativo voce deseja abrir?")
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
                             audios = r.listen(source)
@@ -595,7 +565,7 @@ def code():
                         horario()
                         retorno=("São %d e %d minutos" %(hora,minutos))
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         print(retorno)
 
                     
@@ -609,8 +579,8 @@ def code():
                     elif consulta_db('desligamento'):
                         resposta_db("desligamento")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno) 
-                        Classes.SisSons.desligamento_sound()
+                        Classes.voices.Voices.speak(retorno) 
+                        Classes.reproduzir_som.desligamento_sound()
                         exit()
 
                     
@@ -620,7 +590,7 @@ def code():
                         contexto = " "
                         resposta_db("mudar de assunto")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno) 
+                        Classes.voices.Voices.speak(retorno) 
 
 
 
@@ -628,26 +598,26 @@ def code():
                     elif consulta_db('pular musica'):
                         resposta_db("pular musica")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
-                        Classes.Spotfy.pular()
+                        Classes.voices.Voices.speak(retorno)
+                        Classes.spotfy.Spotfy.pular()
 
                     # Da play em uma musica do spotfy
                     elif consulta_db('play musica'):
                         resposta_db("play musica")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
-                        Classes.Spotfy.play()
+                        Classes.voices.Voices.speak(retorno)
+                        Classes.spotfy.Spotfy.play()
 
                     # Pausa uma musica do spotfy
                     elif consulta_db('pausar musica'):
                         resposta_db("pausar musica")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
-                        Classes.Spotfy.pausar()
+                        Classes.voices.Voices.speak(retorno)
+                        Classes.spotfy.Spotfy.pausar()
                     
                     # Seleciona uma musica do spotfy
                     elif consulta_db('selecionar musica'):
-                        Classes.Voices.speak("Diga o nome da musica que você quer que eu toque")
+                        Classes.voices.Voices.speak("Diga o nome da musica que você quer que eu toque")
                         retorno = "Diga o nome da musica que você quer que eu toque"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -658,12 +628,12 @@ def code():
                             print("Deu um Erro!!")
                         retorno = "Reproduzindo a música que você pediu!"
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
-                        Classes.Spotfy.tocar_uma_musica(musica)
+                        Classes.voices.Voices.speak(retorno)
+                        Classes.spotfy.Spotfy.tocar_uma_musica(musica)
             
                     # Toca uma playlist do spotfy
                     elif consulta_db('tocar playlist'):
-                        Classes.Voices.speak("Diga o nome da playlist que você quer que eu toque")
+                        Classes.voices.Voices.speak("Diga o nome da playlist que você quer que eu toque")
                         retorno = "Diga o nome da playlist que você quer que eu toque"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -674,8 +644,8 @@ def code():
                             print("Deu um Erro!!") 
                         retorno = "Reproduzindo a playlist que você pediu!"
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
-                        Classes.Spotfy.tocar_playlist(musica)
+                        Classes.voices.Voices.speak(retorno)
+                        Classes.spotfy.Spotfy.tocar_playlist(musica)
 
 
              
@@ -684,16 +654,16 @@ def code():
                     elif consulta_db('consulta agenda'):
                         resposta_db("consulta agenda")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         consulta_agenda()
                         
 
 
                     # Insere um novo compromisso na tabela agenda do banco de dados
                     elif consulta_db('inserir agenda'):
-                        Classes.Voices.speak("Abrindo agenda")
+                        Classes.voices.Voices.speak("Abrindo agenda")
                         retorno = "Abrindo agenda"
-                        Classes.Voices.speak("Diga o nome do compromisso que você quer que eu agende!")
+                        Classes.voices.Voices.speak("Diga o nome do compromisso que você quer que eu agende!")
                         retorno = "Diga o nome do compromisso que você quer que eu agende!"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -703,7 +673,7 @@ def code():
                         except:
                             print("Deu um Erro!!")
 
-                        Classes.Voices.speak("Diga a data desse compromisso!")
+                        Classes.voices.Voices.speak("Diga a data desse compromisso!")
                         retorno = "Diga a data desse compromisso!"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -713,7 +683,7 @@ def code():
                         except:
                             print("Deu um Erro!!")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak("Compromisso agendado")
+                        Classes.voices.Voices.speak("Compromisso agendado")
                         retorno = "Compromisso agendado"
                         inserir_agenda(incomprom, indata)
 
@@ -722,21 +692,21 @@ def code():
                     elif consulta_db("desligar sistema"):
                         resposta_db("desligar sistema")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         time.sleep(5)
                         os.system("shutdown /s /t 1")
 
                     elif consulta_db("sair sistema"):
                         resposta_db("sair sistema")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         time.sleep(5)
                         os.system("shutdown -l")
 
                     elif consulta_db("reiniciar sistema"):
                         resposta_db("reiniciar sistema")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         time.sleep(5)
                         os.system("shutdown /r /t 1")
 
@@ -746,36 +716,36 @@ def code():
                         resposta_db("abrir gerenciador de tarefas")
                         pyautogui.hotkey("ctrl", "shift", "esc")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
 
                     elif consulta_db("visao geral das tarefas"):
                         resposta_db("visao geral das tarefas")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         pyautogui.hotkey("winleft", "tab")
 
                     elif consulta_db("nova area de trabalho"):
                         resposta_db("nova area de trabalho")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "d")
 
                     elif consulta_db("deletar area de trabalho"):
                         resposta_db("deletar area de trabalho")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "f4")
 
                     elif consulta_db("mover para a are de trabalho a esquerda"):
                         resposta_db("mover para a are de trabalho a esquerda")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "left")
 
                     elif consulta_db("mover para a are de trabalho a direita"):
                         resposta_db("mover para a are de trabalho a direita")
                         label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.Voices.speak(retorno)
+                        Classes.voices.Voices.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "right")
                         
 
@@ -799,7 +769,7 @@ def code():
                             fast_speak(retorno)
                         except:
                             print("Erro... Openai não respondendo...")
-                            Classes.Voices.speak("Erro... Openai não respondendo...")
+                            Classes.voices.Voices.speak("Erro... Openai não respondendo...")
 
                     inserir_logs(audio_tratado, retorno)
                 
@@ -859,14 +829,14 @@ def init():
 #thread_init.start()
 
 if __name__ == "__main__":
-    Classes.Voices.speak("Verificação de identidade requisitada!")
-    Classes.Voices.speak("Iniciando reconhecimento facial!")
+    Classes.voices.Voices.speak("Verificação de identidade requisitada!")
+    Classes.voices.Voices.speak("Iniciando reconhecimento facial!")
     if Classes.ReconhecimentoFacial.ReconhecimentoFacial.global_reconhecimento_facial():
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
         print("Verificação de identidade Bem Sussedida, Bem vindo Matheus")
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
-        Classes.SisSons.reproduzir_som(r"Sons\Beeps\Beep_reconhecimento_facial_bem_sussedido.mp3")
-        Classes.Voices.speak("Verificação de identidade Bem Sussedida, Bem vindo Matheus!")
+        Classes.reproduzir_som.reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_reconhecimento_facial_bem_sussedido.mp3")
+        Classes.voices.Voices.speak("Verificação de identidade Bem Sussedida, Bem vindo Matheus!")
 
         # Inicia a função main
         thread_code = threading.Thread(target=code)
@@ -877,7 +847,7 @@ if __name__ == "__main__":
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
         print("Verificação de identidade Mal Sussedida, Por favor fale com o Administrador do sistema")
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
-        Classes.Voices.speak("Verificação de identidade Mal Sussedida, Por favor fale com o Administrador do sistema!")
+        Classes.voices.Voices.speak("Verificação de identidade Mal Sussedida, Por favor fale com o Administrador do sistema!")
         exit()
     
     main()
