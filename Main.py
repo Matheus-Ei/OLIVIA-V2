@@ -22,6 +22,16 @@ import pyttsx3
 from gtts import gTTS
 from pydub import AudioSegment
 from pydub.playback import play
+from win10toast import ToastNotifier 
+from plyer import notification
+import string
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import requests
+import json
+
+
 
 
 
@@ -367,7 +377,7 @@ def code():
         conn.commit()
                 
 
-    #Função Sleep
+    # Função Sleep
     def função_resposta():
         loop = 1
         with sr.Microphone() as source:
@@ -389,6 +399,77 @@ def code():
 
                 except sr.UnknownValueError:
                     print("Modo soneca, para me ativar novamente fale 'Acorde' ou 'Ativar'")
+
+    
+    # Exibir Notificações(AINDA NÃO FUNCIONANDO)
+    def exibir_notificacao(titulo, mensagem):
+        notification.notify(
+            title=titulo,
+            message=mensagem,
+            app_icon=None,  # Você pode definir um ícone personalizado para a notificação
+            timeout=10  # A duração da notificação em segundos
+        )
+
+
+    # Enviar Email(AINDA NÃO FUNCIONANDO)
+    def enviar_email(destinatario, Assunto, message):
+        # Configurações do servidor SMTP do Gmail
+        smtp_server = 'smtp.gmail.com'
+        smtp_port = 587
+        username = 'eickoffmatheus@gmail.com'
+        password = '123@Matheuse'
+
+        # Crie uma instância da mensagem
+        msg = MIMEMultipart()
+        msg['From'] = username
+        msg['To'] = destinatario
+        msg['Subject'] = Assunto
+
+        # Corpo do e-mail
+        msg.attach(MIMEText(message, 'plain'))
+
+        # Conecte-se ao servidor SMTP
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(username, password)
+
+        # Envie o e-mail
+        server.send_message(msg)
+        server.quit()
+
+
+    # Faz a Previsão do Tempo
+    def previsao_do_tempo():
+        # Insira sua chave da API do OpenWeatherMap
+        API_KEY = '2537c1c37c801829837044d807c5f94d'
+        
+        # Insira o nome da cidade para a qual deseja obter a previsão do tempo
+        cidade = 'Chapeco'
+
+        # Monta a URL para a chamada da API
+        url = f'http://api.openweathermap.org/data/2.5/weather?q={cidade}&appid={API_KEY}'
+
+        # Faz a chamada da API
+        response = requests.get(url)
+        # Verifica se a chamada foi bem-sucedida
+        data = json.loads(response.text)
+        
+        # Extrai as informações relevantes da resposta da API
+        temperatura = data['main']['temp']
+        descricao = data['weather'][0]['description']
+
+        # Exibe a previsão do tempo
+        print(f'Previsão do tempo para {cidade}:')
+        print(f'Temperatura: {temperatura}°C')
+        print(f'Descrição: {descricao}')
+
+
+
+    # Gerar Senha
+    def gerar_senha(tamanho):
+        caracteres = string.ascii_letters + string.digits + string.punctuation
+        senha = ''.join(random.choice(caracteres) for _ in range(tamanho))
+        return senha
 
 
     #Abre o microfone pra captura
