@@ -247,7 +247,7 @@ def code():
         engine = pyttsx3.init()
         # Sintetiza o texto
         engine.save_to_file(texto, "data.mp3")
-        engine.setProperty("rate", 300)  # Aumenta a velocidade em 50%
+        engine.setProperty("rate", 400)  # Aumenta a velocidade em 50%
         engine.runAndWait()
         # Carrega o áudio gerado
         audio = AudioSegment.from_wav("data.mp3")
@@ -289,7 +289,6 @@ def code():
                 roww = str(row[0])
                 if roww in audio_tratado:
                     return True
-
         except pyodbc.Error as e:
             print(e)
 
@@ -704,7 +703,7 @@ def code():
                         #Classes.SisSons.reproduzir_som(r"Sons\Beeps\beep_pensando.mp3")
                         try:
                             entrada = contexto + "\n" + audio_tratado + "\n"
-                            openai.api_key = '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'
+                            openai.api_key = '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'
                             response = openai.ChatCompletion.create(
                                 model="gpt-3.5-turbo",
                                 messages=[
