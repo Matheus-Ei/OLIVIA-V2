@@ -1,7 +1,14 @@
+# Imports
 import os
 import pygame
+from gtts import gTTS
+from pydub import AudioSegment
+from pydub.playback import play
+import pyttsx3
 
 
+
+# Função para fala normal, mais demorada, porem com qualidade melhor
 def speak(data):
     voice = 'en-US-SteffanNeural'
     voice2 = 'pt-BR-AntonioNeural'
@@ -29,3 +36,20 @@ def speak(data):
     finally:
         pygame.mixer.music.stop()
         pygame.mixer.quit()
+
+
+
+# Função para fala rápida, porem com qualidade menor
+def fast_speak(texto):
+    # Inicializa o mecanismo de síntese de voz
+    engine = pyttsx3.init()
+    # Sintetiza o texto
+    engine.save_to_file(texto, "Sons/data.mp3")
+    engine.setProperty("rate", 400)  # Aumenta a velocidade em 50%
+    engine.runAndWait()
+    # Carrega o áudio gerado
+    audio = AudioSegment.from_wav("Sons/data.mp3")
+    # Ajusta o volume (por exemplo, 6 dB para aumentar em 6 decibéis)
+    volume_adjustment = 6
+    audio = audio + volume_adjustment
+    play(audio)

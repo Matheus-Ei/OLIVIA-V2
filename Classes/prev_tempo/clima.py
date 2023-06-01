@@ -3,7 +3,7 @@ import requests
 import json
 
 
-# Faz a Previsão do Tempo(AINDA NÃO FUNCIONANDO)
+# Faz a Previsão do Tempo
 def previsao_do_tempo():
     # Insira sua chave da API do OpenWeatherMap
     API_KEY = '2537c1c37c801829837044d807c5f94d'
