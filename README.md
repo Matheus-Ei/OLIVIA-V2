@@ -1,7 +1,5 @@
 # J.A.R.V.I.S
 ## Próximas Alterações a Serem Feitas
-- Seccionar as funções de dentro do código principal para diferentes arquivos e importa-los como classes
-- Deletar as pastas e arquivos inuteis de dentro do código
 
 
 ## Requisitos para usar o Assistente:
