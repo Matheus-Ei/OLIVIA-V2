@@ -30,12 +30,13 @@ import Classes.voices.Voices
 import Classes.reproduzir_som.reproduzir_som
 import Classes.ReconhecimentoFacial.ReconhecimentoFacial
 import Classes.spotfy.Spotfy
-import Classes.reproduzir_gif.reproduzir_gif
-import Classes.senhas.senhas
-import Classes.prev_tempo.clima
-import Classes.env_email.env_email
-import Classes.notificacoes.notificacoes
-import Classes.keylogger.keylogger
+import Classes.senhas.senhas as senhas
+import Classes.prev_tempo.clima as prev_tempo
+import Classes.env_mensagem.env_email as env_email
+import Classes.env_mensagem.enviar_mensagens_whats as env_whats
+import Classes.notificacoes.notificacoes as notificacao
+import Classes.keylogger.keylogger as keylogger
+import Classes.mostrar_gif_em_janela_pyqt5.mostrar_gif_janela_pyqt5 as mostrar_gif
 
 
 
@@ -44,11 +45,13 @@ import Classes.keylogger.keylogger
 # Pre-Definições de Váriaveis
 audio_tratado = ""
 retorno = ""
+inicializado = False
+inicializacao = ""
 
 
 
 
-
+# Função principal do Front-end
 def main():
     global label_user, label_jarvis, button
     global audio_tratado, text_edit
@@ -77,78 +80,6 @@ def main():
     gif.setGeometry(0, 0, window_frame.width(), window_frame.height())
 
 
-    # Mostra o GIF da imagem da assitente girando
-    imagem_girando = QLabel(window)
-    imagem_girando.setGeometry(1550, 480, 700, 700)
-    movie_girando = QMovie(r"Interface\Graficos\Pi-Slices.gif")
-    imagem_girando.setMovie(movie_girando)
-    movie_girando.start()
-
-
-    # Mostra o GIF da imagem topografica
-    imagem_topografica = QLabel(window)
-    imagem_topografica.setScaledContents(True)
-    imagem_topografica.setFixedSize(250, 350)
-    imagem_topografica.setGeometry(1650, 50, 700, 700)
-    movie_topo = QMovie(r"Interface\Graficos\Tumblr.gif")
-    imagem_topografica.setMovie(movie_topo)
-    movie_topo.start()
-
-
-    # Mostra o GIF do qrcode
-    imagem_qrcode = QLabel(window)
-    imagem_qrcode.setScaledContents(True)
-    imagem_qrcode.setFixedSize(300, 300)
-    imagem_qrcode.setGeometry(0, 500, 700, 700)
-    movie_qrcode = QMovie(r"Interface\Graficos\necessary disorder_ Photo.gif")
-    imagem_qrcode.setMovie(movie_qrcode)
-    movie_qrcode.start()
-    
-    # Mostra o GIF do planets
-    imagem_planets = QLabel(window)
-    imagem_planets.setScaledContents(True)
-    imagem_planets.setFixedSize(300, 300)
-    imagem_planets.setGeometry(0, 750, 700, 700)
-    movie_planets = QMovie(r"Interface\Graficos\AK KAO on Behance.gif")
-    imagem_planets.setMovie(movie_planets)
-    movie_planets.start()
-
-    # Mostra o GIF do gravidade
-    imagem_gravidade = QLabel(window)
-    imagem_gravidade.setScaledContents(True)
-    imagem_gravidade.setFixedSize(300, 300)
-    imagem_gravidade.setGeometry(17, 50, 700, 700)
-    movie_gravidade = QMovie(r"Interface\Graficos\Space Oddity.gif")
-    imagem_gravidade.setMovie(movie_gravidade)
-    movie_gravidade.start()
-
-    # Mostra o GIF do tenis da nike
-    imagem_tenis = QLabel(window)
-    imagem_tenis.setScaledContents(True)
-    imagem_tenis.setFixedSize(300, 200)
-    imagem_tenis.setGeometry(10, 350, 700, 700)
-    movie_tenis = QMovie(r"Interface\Graficos\CypherAudio 03.gif")
-    imagem_tenis.setMovie(movie_tenis)
-    movie_tenis.start()
-
-    # Mostra o GIF das letras
-    imagem_letras = QLabel(window)
-    imagem_letras.setScaledContents(True)
-    imagem_letras.setFixedSize(200, 200)
-    imagem_letras.setGeometry(1700, 400, 700, 700)
-    movie_letras = QMovie(r"Interface\Graficos\Accept & Forget.gif")
-    imagem_letras.setMovie(movie_letras)
-    movie_letras.start()
-
-    # Mostra o GIF das do audio
-    imagem_audio = QLabel(window)
-    imagem_audio.setScaledContents(True)
-    imagem_audio.setFixedSize(640, 360)
-    imagem_audio.setGeometry(620, 830, 700, 700)
-    movie_audio = QMovie(r"Interface\Graficos\صوتية-موجات-المدة.gif")
-    imagem_audio.setMovie(movie_audio)
-    movie_audio.start()
-
     # Crie um QLabel
     label_user = QLabel('...', window)
     # Habilitar a quebra de linha automática
@@ -161,9 +92,9 @@ def main():
     palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
     label_user.setPalette(palette)
     # Definir tamanho fixo para o rótulo
-    label_user.setFixedSize(300, 300)
+    label_user.setFixedSize(300, 500)
     # Configure a posição do QLabel
-    label_user.move(580, 0)
+    label_user.move(10, 20)
     label_user.show()
 
     # Crie um QLabel
@@ -180,15 +111,15 @@ def main():
     # Definir a paleta do QLabel
     label_jarvis.setPalette(palette)
     # Definir tamanho fixo para o rótulo
-    label_jarvis.setFixedSize(300, 300)
+    label_jarvis.setFixedSize(300, 500)
     # Configure a posição do QLabel
-    label_jarvis.move(980, 0)
+    label_jarvis.move(1600, 20)
     label_jarvis.show()
 
 
     # Caixa de texto
     text_edit = QTextEdit(window)
-    text_edit.setGeometry(780, 800, 300, 100)
+    text_edit.setGeometry(780, 850, 300, 100)
     # Estilo para a caixa de texto
     style_sheet = """
         QTextEdit {
@@ -208,7 +139,7 @@ def main():
 
     # Botão
     button = QPushButton("Enviar", window)
-    button.setGeometry(880, 920, 100, 30)
+    button.setGeometry(880, 970, 100, 30)
     button.clicked.connect(vall)
     # Estilo para o botão
     style_sheet = """
@@ -239,12 +170,18 @@ def code():
     global audio_tratado
     global retorno
     global label_user, label_jarvis, button
+    global label_inicializacao, inicializado, inicializacao
 
+    time.sleep(2)
 
     # Cria o reconhecedor de voz e o leitor de texto automatizado
+    inicializacao = "<Criando reconhecedor de voz>\n"
     print("<Criando reconhecedor de voz>")
+    label_inicializacao.setText(inicializacao)
     r = sr.Recognizer()
+    inicializacao = inicializacao+"<Leitor de texto automatizado criado>\n"
     print("<Leitor de texto automatizado criado>")
+    label_inicializacao.setText(inicializacao)
 
 
     # Define a Localização no tempo(Horas)
@@ -258,12 +195,16 @@ def code():
         Mes_do_ano = tempo.strftime("%B")
         Ano = tempo.strftime("%Y")
 
+    inicializacao = inicializacao+"<Conectando com o banco de dados>\n"
     print("<Conectando com o banco de dados>")
+    label_inicializacao.setText(inicializacao)
     # Definir a string de conexão com o banco de dados do Access
     conn_str = r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Banco_de_dados\jar.accdb;'
     conn = pyodbc.connect(conn_str)
     cursor = conn.cursor()
+    inicializacao = inicializacao+"<Banco de dados conectado>\n"
     print("<Banco de dados conectado>")
+    label_inicializacao.setText(inicializacao)
 
 
 
@@ -381,10 +322,15 @@ def code():
     retorno = ""
     modo_jarvis = ""
     with sr.Microphone() as source:
+        inicializacao = inicializacao+"<Ajustando o ruido do ambiente>\n"
         print("<Ajustando o ruido do ambiente>")
+        label_inicializacao.setText(inicializacao)
         r.adjust_for_ambient_noise(source, duration=3)
+        inicializacao = inicializacao+"<Ruido do ambiente ajustado>\n"
         print("<Ruido do ambiente ajustado>")
+        label_inicializacao.setText(inicializacao)
         Classes.reproduzir_som.reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
+        inicializado = True
         while True:
             print("Ouvindo...\n")
             try:
@@ -694,7 +640,7 @@ def code():
                                 messages=[
                                     {"role": "system", "content":entrada}
                                 ],
-                                max_tokens=150
+                                max_tokens=200
                             )
                             retorno = response['choices'][0]['message']['content']
                             contexto += audio_tratado + "\n" + retorno + "\n"
@@ -719,11 +665,13 @@ def code():
 
 
 
+# Função de Front-end mostrada durante a inicialização
 def init():
+    global contador, janela_rep, label_inicializacao, inicializado, inicializacao
     app = QApplication(sys.argv)
 
     initt = QMainWindow()
-    initt.setWindowTitle("Janela com GIF Animado")
+    initt.setWindowTitle("Inicialização")
     initt.setWindowState(initt.windowState() | QtCore.Qt.WindowFullScreen)
 
     # Define a cor de fundo como preto
@@ -731,20 +679,65 @@ def init():
     palette.setColor(initt.backgroundRole(), QColor(0, 0, 0))
     initt.setPalette(palette)
 
+    # Mostra o GIF da imagem topografica
+    imagem_top = QLabel(initt)
+    imagem_top.setScaledContents(True)
+    imagem_top.setFixedSize(400, 300)
+    imagem_top.setGeometry(0, 10, 700, 700)
+    movie_topo = QMovie(r"Interface\Graficos\Lock Screen Animation.gif")
+    imagem_top.setMovie(movie_topo)
+    movie_topo.start()
+
+
+    # Crie um QLabel
+    label_inicializacao = QLabel('', initt)
+    # Habilitar a quebra de linha automática
+    label_inicializacao.setWordWrap(True)
+    font = QFont("Courier New", 12)  # Fonte Arial com tamanho 12
+    label_inicializacao.setFont(font)
+    # Criar uma instância de QPalette
+    palette = QPalette()
+    # Definir a cor do texto para branco
+    palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+    # Definir a paleta do QLabel
+    label_inicializacao.setPalette(palette)
+    # Definir tamanho fixo para o rótulo
+    label_inicializacao.setFixedSize(500, 200)
+    # Configure a posição do QLabel
+    label_inicializacao.move(1500, 20)
+    label_inicializacao.show()
+
+
     # Mostra o GIF do centro da tela
     gif = QLabel(initt)
-    movie = QMovie(r"Interface\Graficos\GEEKtyper_com - Aperture Science.gif")
+    movie = QMovie(r"Interface\Graficos\Gif overlay for editing and stuff on We Heart It.gif")
     gif.setMovie(movie)
-    movie.start()
     window_frame = initt.frameGeometry()
     center_point = QDesktopWidget().availableGeometry().center()
     window_frame.moveCenter(center_point)
     initt.move(window_frame.topLeft())
-    gif.setAlignment(Qt.AlignCenter)
+    gif.setAlignment(QtCore.Qt.AlignCenter)
     gif.setGeometry(0, 0, window_frame.width(), window_frame.height())
 
+    # Função para verificar se o último quadro foi alcançado e imprimir a mensagem
+    contador = 1
+    def check_last_frame(frame):
+        global janela_rep, contador
+        if inicializado == True:
+            print("<Inicialização Finalizada>")
+            initt.close()
+            return True
+
+    # Conecta o sinal 'frameChanged' do QMovie à função check_last_frame
+    movie.frameChanged.connect(check_last_frame)
+
     initt.show()
-    sys.exit(app.exec())
+    initt.activateWindow()  # Traz a janela para frente e a torna ativa
+    movie.start()
+
+    app.exec()
+
+    return True
 
 
 
@@ -752,23 +745,26 @@ def init():
 
 
 
+
+
+
+
+# Função que fica captando informações
 def info():
     while True:
-        Classes.keylogger.keylogger.key()
+        keylogger.key()
 
 
 
 
 
 # Inicia o reconhecimento facial, se der verdadeiro ele acessa o código
-# Inicia a função init
-#thread_init = threading.Thread(target=init)
-#thread_init.start()
-
 if __name__ == "__main__":
+    janela_rep = False
     Classes.voices.Voices.speak("Verificação de identidade requisitada!")
     Classes.voices.Voices.speak("Iniciando reconhecimento facial!")
     if Classes.ReconhecimentoFacial.ReconhecimentoFacial.global_reconhecimento_facial():
+    #if True:
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
         print("Verificação de identidade Bem Sussedida, Bem vindo Matheus")
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
@@ -787,4 +783,8 @@ if __name__ == "__main__":
         Classes.voices.Voices.speak("Verificação de identidade Mal Sussedida, Por favor fale com o Administrador do sistema!")
         exit()
     
-    main()
+
+
+    # Inicia a função init
+    if init():
+        main()
