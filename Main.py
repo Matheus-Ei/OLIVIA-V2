@@ -19,6 +19,8 @@ from PyQt5.QtGui import *
 from PyQt5 import QtCore
 from PyQt5.QtCore import *
 import keyboard
+import ffmpeg
+import ffmpeg_normalize
 
 
 
@@ -27,7 +29,7 @@ import keyboard
 
 # Classes Criadas
 import Classes.voices.Voices
-import Classes.reproduzir_som.reproduzir_som
+import Classes.reproduzir_som.reproduzir_som as reproduzir_som
 import Classes.ReconhecimentoFacial.ReconhecimentoFacial
 import Classes.spotfy.Spotfy
 import Classes.senhas.senhas as senhas
@@ -37,7 +39,6 @@ import Classes.env_mensagem.enviar_mensagens_whats as env_whats
 import Classes.notificacoes.notificacoes as notificacao
 import Classes.keylogger.keylogger as keylogger
 import Classes.mostrar_gif_em_janela_pyqt5.mostrar_gif_janela_pyqt5 as mostrar_gif
-
 
 
 
@@ -329,7 +330,7 @@ def code():
         inicializacao = inicializacao+"<Ruido do ambiente ajustado>\n"
         print("<Ruido do ambiente ajustado>")
         label_inicializacao.setText(inicializacao)
-        Classes.reproduzir_som.reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
+        reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
         inicializado = True
         while True:
             print("Ouvindo...\n")
@@ -353,7 +354,7 @@ def code():
                         retorno = "Ativando o modo soneca"
                         label_jarvis.setText("Jarvis: "+retorno)
                         Classes.voices.Voices.speak(retorno)
-                        Classes.reproduzir_som.reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
+                        reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
                         print("------------")
                         print("Modo Soneca")
                         print("------------")
@@ -460,7 +461,7 @@ def code():
                         resposta_db("desligamento")
                         label_jarvis.setText("Jarvis: "+retorno)
                         Classes.voices.Voices.speak(retorno) 
-                        Classes.reproduzir_som.desligamento_sound()
+                        reproduzir_som.reproduzir_som(r"Sons\Desligamento\Desligamento 1.mp3")
                         exit()
 
                     
@@ -646,7 +647,7 @@ def code():
                             contexto += audio_tratado + "\n" + retorno + "\n"
                             label_jarvis.setText("Jarvis: "+retorno)
                             print(retorno)
-                            Classes.voices.Voices.fast_speak(retorno)
+                            Classes.voices.Voices.speak(retorno)
                         except:
                             print("Erro... Openai não respondendo...")
                             Classes.voices.Voices.speak("Erro... Openai não respondendo...")
@@ -678,15 +679,6 @@ def init():
     palette = initt.palette()
     palette.setColor(initt.backgroundRole(), QColor(0, 0, 0))
     initt.setPalette(palette)
-
-    # Mostra o GIF da imagem topografica
-    imagem_top = QLabel(initt)
-    imagem_top.setScaledContents(True)
-    imagem_top.setFixedSize(400, 300)
-    imagem_top.setGeometry(0, 10, 700, 700)
-    movie_topo = QMovie(r"Interface\Graficos\Lock Screen Animation.gif")
-    imagem_top.setMovie(movie_topo)
-    movie_topo.start()
 
 
     # Crie um QLabel
@@ -752,7 +744,7 @@ def init():
 # Função que fica captando informações
 def info():
     while True:
-        keylogger.key()
+        tecla = keylogger.key()
 
 
 
@@ -760,20 +752,27 @@ def info():
 
 # Inicia o reconhecimento facial, se der verdadeiro ele acessa o código
 if __name__ == "__main__":
-    janela_rep = False
-    Classes.voices.Voices.speak("Verificação de identidade requisitada!")
-    Classes.voices.Voices.speak("Iniciando reconhecimento facial!")
+
+    print("<<Verificação de identidade requisitada>>")
+    reproduzir_som.reproduzir_som(r"Sons\Vozes\Verificação de identidade requisitada.mp3")
+    print("<<Iniciando reconhecimento facial>>")
+    reproduzir_som.reproduzir_som(r"Sons\Vozes\Iniciando reconhecimento facial.mp3")
+    
     if Classes.ReconhecimentoFacial.ReconhecimentoFacial.global_reconhecimento_facial():
     #if True:
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
         print("Verificação de identidade Bem Sussedida, Bem vindo Matheus")
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
-        Classes.reproduzir_som.reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_reconhecimento_facial_bem_sussedido.mp3")
-        Classes.voices.Voices.speak("Verificação de identidade Bem Sussedida, Bem vindo Matheus!")
+        reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_reconhecimento_facial_bem_sussedido.mp3")
+        reproduzir_som.reproduzir_som(r"Sons\Vozes\Verificação de identidade Bem Sussedida Bem vindo Matheus.mp3")
 
-        # Inicia a função main
+        # Inicia a função code para o back-end
         thread_code = threading.Thread(target=code)
         thread_code.start()
+
+        # Inicia a função info
+        #thread_info = threading.Thread(target=info)
+        #thread_info.start()
 
     # Se não ele fecha a execução
     else:
