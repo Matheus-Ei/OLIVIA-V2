@@ -1,6 +1,12 @@
 # J.A.R.V.I.S
 ## Próximas Alterações a Serem Feitas
 
+## O Quanto eu Estou Disposto a Investir Nesse Projeto
+- 25/M Canva
+- 25/M Host
+- 100/M Publicidade Paga
+
+- Total Mensal=>150/M
 
 ## Requisitos para usar o Assistente:
 - 01 Notebook ou PC
