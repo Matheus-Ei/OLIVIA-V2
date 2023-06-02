@@ -771,8 +771,8 @@ if __name__ == "__main__":
         thread_code.start()
 
         # Inicia a função info
-        #thread_inf = threading.Thread(target=info)
-        #thread_inf.start()
+        #thread_info = threading.Thread(target=info)
+        #thread_info.start()
 
     # Se não ele fecha a execução
     else:
