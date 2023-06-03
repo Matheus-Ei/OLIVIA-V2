@@ -28,10 +28,10 @@ import ffmpeg_normalize
 
 
 # Classes Criadas
-import Classes.voices.Voices
+import Classes.voices.Voices as voice
 import Classes.reproduzir_som.reproduzir_som as reproduzir_som
 import Classes.ReconhecimentoFacial.ReconhecimentoFacial
-import Classes.spotfy.Spotfy
+import Classes.spotfy.Spotfy as spotfy
 import Classes.senhas.senhas as senhas
 import Classes.prev_tempo.clima as prev_tempo
 import Classes.env_mensagem.env_email as env_email
@@ -39,6 +39,7 @@ import Classes.env_mensagem.enviar_mensagens_whats as env_whats
 import Classes.notificacoes.notificacoes as notificacao
 import Classes.keylogger.keylogger as keylogger
 import Classes.mostrar_gif_em_janela_pyqt5.mostrar_gif_janela_pyqt5 as mostrar_gif
+import Classes.Gerenciamento_app.Gerenciamento_app as aplicativo
 
 
 
@@ -60,7 +61,7 @@ def main():
     app = QApplication(sys.argv)
 
     window = QMainWindow()
-    window.setWindowTitle("Janela com GIF Animado")
+    window.setWindowTitle("JARVIS")
     window.setWindowState(window.windowState() | QtCore.Qt.WindowFullScreen)
 
     # Define a cor de fundo como preto
@@ -81,11 +82,29 @@ def main():
     gif.setGeometry(0, 0, window_frame.width(), window_frame.height())
 
 
+
+    # Crie um QLabel
+    label_user_id = QLabel('USUÁRIO', window)
+    # Habilitar a quebra de linha automática
+    label_user_id.setWordWrap(True)
+    label_user_id.setAlignment(Qt.AlignHCenter)
+    font = QFont("Courier New", 18)  # Fonte Arial com tamanho 12
+    label_user_id.setFont(font)
+    # Criar uma instância de QPalette
+    palette = QPalette()
+    palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+    label_user_id.setPalette(palette)
+    # Definir tamanho fixo para o rótulo
+    label_user_id.setFixedSize(300, 500)
+    # Configure a posição do QLabel
+    label_user_id.move(10, 40)
+    label_user_id.show()
+
     # Crie um QLabel
     label_user = QLabel('...', window)
     # Habilitar a quebra de linha automática
     label_user.setWordWrap(True)
-    label_user.setAlignment(Qt.AlignCenter)
+    label_user.setAlignment(Qt.AlignHCenter)
     font = QFont("Courier New", 12)  # Fonte Arial com tamanho 12
     label_user.setFont(font)
     # Criar uma instância de QPalette
@@ -95,14 +114,37 @@ def main():
     # Definir tamanho fixo para o rótulo
     label_user.setFixedSize(300, 500)
     # Configure a posição do QLabel
-    label_user.move(10, 20)
+    label_user.move(10, 80)
     label_user.show()
+
+
+
+    # Crie um QLabel
+    label_jarvis_id = QLabel('J.A.R.V.I.S', window)
+    # Habilitar a quebra de linha automática
+    label_jarvis_id.setWordWrap(True)
+    # Centralizar o texto horizontalmente
+    label_jarvis_id.setAlignment(Qt.AlignHCenter)
+    font = QFont("Courier New", 18)  # Fonte Arial com tamanho 12
+    label_jarvis_id.setFont(font)
+    # Criar uma instância de QPalette
+    palette = QPalette()
+    # Definir a cor do texto para branco
+    palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+    # Definir a paleta do QLabel
+    label_jarvis_id.setPalette(palette)
+    # Definir tamanho fixo para o rótulo
+    label_jarvis_id.setFixedSize(300, 500)
+    # Configure a posição do QLabel
+    label_jarvis_id.move(1600, 40)
+    label_jarvis_id.show()
 
     # Crie um QLabel
     label_jarvis = QLabel('...', window)
     # Habilitar a quebra de linha automática
     label_jarvis.setWordWrap(True)
-    label_jarvis.setAlignment(Qt.AlignCenter)
+    # Centralizar o texto horizontalmente
+    label_jarvis.setAlignment(Qt.AlignHCenter)
     font = QFont("Courier New", 12)  # Fonte Arial com tamanho 12
     label_jarvis.setFont(font)
     # Criar uma instância de QPalette
@@ -114,7 +156,7 @@ def main():
     # Definir tamanho fixo para o rótulo
     label_jarvis.setFixedSize(300, 500)
     # Configure a posição do QLabel
-    label_jarvis.move(1600, 20)
+    label_jarvis.move(1600, 80)
     label_jarvis.show()
 
 
@@ -158,6 +200,9 @@ def main():
     button.setStyleSheet(style_sheet)
 
     window.show()
+
+    aplicativo.app_na_frente("JARVIS")
+
     sys.exit(app.exec())
 
 
@@ -342,7 +387,7 @@ def code():
                 print("Reconhecendo...\n")
                 print(audio_tratado + "\n")
                 
-                label_user.setText("Usuário: " + audio_tratado)
+                label_user.setText(audio_tratado)
                 
 
             #Codigos das respostas
@@ -352,8 +397,8 @@ def code():
                     #Modo suspenção
                     if consulta_db('modo soneca'):
                         retorno = "Ativando o modo soneca"
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_ja_pode_falar.mp3")
                         print("------------")
                         print("Modo Soneca")
@@ -362,27 +407,27 @@ def code():
                         modo_soneca()
 
 
-
+                    # Desativar o Modo Jarvis
                     elif consulta_db('desativar modo jarvis'):
                         modo_jarvis = ""
                         resposta_db("desativar modo jarvis")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
 
 
-
+                    # Ativar o Modo Jarvis
                     elif consulta_db('modo jarvis'):
                         modo_jarvis = "jarvis"
                         resposta_db("modo jarvis")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
 
 
                         
                     # Gera imagens com base nas descrições do usuario
                     elif consulta_db('modo geracao de imagem'):
                         openai.api_key = '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'
-                        Classes.voices.Voices.speak("Descreva a imagem que você deseja Gerar")
+                        voice.speak("Descreva a imagem que você deseja Gerar")
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
                             audios = r.listen(source)
@@ -391,7 +436,7 @@ def code():
                             print(audio_tratados)
                         except:
                             print("Deu um Erro!!")
-                        Classes.voices.Voices.speak("Gerando Imagem")
+                        voice.speak("Gerando Imagem")
                         response = openai.Image.create(
                         prompt = "Imagem com o estilo cartoon realista e meio aquarela e criativa sobre: " + audio_tratados,
                         n=1,
@@ -401,43 +446,25 @@ def code():
                         print(image_url)
                         # Abre o link no navegador padrão
                         retorno = "Abrindo a Imagem Gerada"
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         webbrowser.open(image_url)
 
 
 
                     # Abre um aplicativo
                     elif  consulta_db('abrir aplicativo'):
-                        # Dicionário com os atalhos e caminhos dos aplicativos
-                        aplicativos = {
-                            'calculadora': 'C:\\Windows\\System32\\calc.exe',
-                            'bloco de notas': 'C:\\Windows\\System32\\notepad.exe',
-                            'explorador de arquivos': 'C:\\Windows\\explorer.exe',
-                            'ópera': 'C:\\Users\\t4iga\\AppData\\Local\\Programs\\Opera\\launcher.exe',
-                            'navegador': 'C:\\Users\\t4iga\\AppData\\Local\\Programs\\Opera\\launcher.exe',
-                            'canva': 'C:\\Users\\t4iga\\AppData\\Local\\Programs\\Canva\\Canva.exe',
-                        }
-                        # Função para abrir um aplicativo a partir de um atalho
-                        def abrir_aplicativo(atalho):
-                            if atalho in aplicativos:
-                                caminho = aplicativos[atalho]
-                                subprocess.Popen(caminho)
-                                print(f"Aplicativo '{atalho}' aberto.")
-                                Classes.voices.Voices.speak("Abrindo " + atalho)
-                            else:
-                                print(f"Atalho '{atalho}' não encontrado.")
-                                Classes.voices.Voices.speak(atalho + "Não encontrado")
                         # Pede qual aplicativo deseja abrir
-                        Classes.voices.Voices.speak("Qual aplicativo voce deseja abrir?")
+                        voice.speak("Qual aplicativo voce deseja abrir?")
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
                             audios = r.listen(source)
                             atalho=(r.recognize_google(audios, language='pt-br'))
                             print(atalho)
+                            aplicativo.abrir_app(atalho)
                         except:
                             print("Deu um Erro!!")
-                        abrir_aplicativo(atalho)
+                        
 
                     
 
@@ -445,8 +472,8 @@ def code():
                     elif consulta_db('horas'):
                         horario()
                         retorno=("São %d e %d minutos" %(hora,minutos))
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         print(retorno)
 
                     
@@ -459,8 +486,8 @@ def code():
                     # Finaliza o código
                     elif consulta_db('desligamento'):
                         resposta_db("desligamento")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno) 
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno) 
                         reproduzir_som.reproduzir_som(r"Sons\Desligamento\Desligamento 1.mp3")
                         exit()
 
@@ -470,35 +497,35 @@ def code():
                     elif consulta_db('mudar de assunto'):
                         contexto = " "
                         resposta_db("mudar de assunto")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno) 
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno) 
 
 
 
                     # Pula uma musica do spotfy
                     elif consulta_db('pular musica'):
                         resposta_db("pular musica")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
-                        Classes.spotfy.Spotfy.pular()
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
+                        spotfy.pular()
 
                     # Da play em uma musica do spotfy
                     elif consulta_db('play musica'):
                         resposta_db("play musica")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
-                        Classes.spotfy.Spotfy.play()
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
+                        spotfy.play()
 
                     # Pausa uma musica do spotfy
                     elif consulta_db('pausar musica'):
                         resposta_db("pausar musica")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
-                        Classes.spotfy.Spotfy.pausar()
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
+                        spotfy.pausar()
                     
                     # Seleciona uma musica do spotfy
                     elif consulta_db('selecionar musica'):
-                        Classes.voices.Voices.speak("Diga o nome da musica que você quer que eu toque")
+                        voice.speak("Diga o nome da musica que você quer que eu toque")
                         retorno = "Diga o nome da musica que você quer que eu toque"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -508,13 +535,13 @@ def code():
                         except:
                             print("Deu um Erro!!")
                         retorno = "Reproduzindo a música que você pediu!"
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
-                        Classes.spotfy.Spotfy.tocar_uma_musica(musica)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
+                        spotfy.tocar_uma_musica(musica)
             
                     # Toca uma playlist do spotfy
                     elif consulta_db('tocar playlist'):
-                        Classes.voices.Voices.speak("Diga o nome da playlist que você quer que eu toque")
+                        voice.speak("Diga o nome da playlist que você quer que eu toque")
                         retorno = "Diga o nome da playlist que você quer que eu toque"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -524,9 +551,9 @@ def code():
                         except:
                             print("Deu um Erro!!") 
                         retorno = "Reproduzindo a playlist que você pediu!"
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
-                        Classes.spotfy.Spotfy.tocar_playlist(musica)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
+                        spotfy.tocar_playlist(musica)
 
 
              
@@ -534,17 +561,17 @@ def code():
                     # Consulta os valores que estão cadastrados na tabela agenda do banco de dados
                     elif consulta_db('consulta agenda'):
                         resposta_db("consulta agenda")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         consulta_agenda()
                         
 
 
                     # Insere um novo compromisso na tabela agenda do banco de dados
                     elif consulta_db('inserir agenda'):
-                        Classes.voices.Voices.speak("Abrindo agenda")
+                        voice.speak("Abrindo agenda")
                         retorno = "Abrindo agenda"
-                        Classes.voices.Voices.speak("Diga o nome do compromisso que você quer que eu agende!")
+                        voice.speak("Diga o nome do compromisso que você quer que eu agende!")
                         retorno = "Diga o nome do compromisso que você quer que eu agende!"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -554,7 +581,7 @@ def code():
                         except:
                             print("Deu um Erro!!")
 
-                        Classes.voices.Voices.speak("Diga a data desse compromisso!")
+                        voice.speak("Diga a data desse compromisso!")
                         retorno = "Diga a data desse compromisso!"
                         try:
                             r.adjust_for_ambient_noise(source, duration=1)
@@ -563,8 +590,8 @@ def code():
                             indata=(r.recognize_google(audios, language='pt-br'))
                         except:
                             print("Deu um Erro!!")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak("Compromisso agendado")
+                        label_jarvis.setText(retorno)
+                        voice.speak("Compromisso agendado")
                         retorno = "Compromisso agendado"
                         inserir_agenda(incomprom, indata)
 
@@ -572,22 +599,22 @@ def code():
                     # Códigos para executar ações do sistema principal
                     elif consulta_db("desligar sistema"):
                         resposta_db("desligar sistema")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         time.sleep(5)
                         os.system("shutdown /s /t 1")
 
                     elif consulta_db("sair sistema"):
                         resposta_db("sair sistema")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         time.sleep(5)
                         os.system("shutdown -l")
 
                     elif consulta_db("reiniciar sistema"):
                         resposta_db("reiniciar sistema")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         time.sleep(5)
                         os.system("shutdown /r /t 1")
 
@@ -596,37 +623,37 @@ def code():
                     elif consulta_db("abrir gerenciador de tarefas"):
                         resposta_db("abrir gerenciador de tarefas")
                         pyautogui.hotkey("ctrl", "shift", "esc")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
 
                     elif consulta_db("visao geral das tarefas"):
                         resposta_db("visao geral das tarefas")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         pyautogui.hotkey("winleft", "tab")
 
                     elif consulta_db("nova area de trabalho"):
                         resposta_db("nova area de trabalho")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "d")
 
                     elif consulta_db("deletar area de trabalho"):
                         resposta_db("deletar area de trabalho")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "f4")
 
                     elif consulta_db("mover para a are de trabalho a esquerda"):
                         resposta_db("mover para a are de trabalho a esquerda")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "left")
 
                     elif consulta_db("mover para a are de trabalho a direita"):
                         resposta_db("mover para a are de trabalho a direita")
-                        label_jarvis.setText("Jarvis: "+retorno)
-                        Classes.voices.Voices.speak(retorno)
+                        label_jarvis.setText(retorno)
+                        voice.speak(retorno)
                         pyautogui.hotkey("ctrl", "winleft", "right")
                         
 
@@ -645,12 +672,12 @@ def code():
                             )
                             retorno = response['choices'][0]['message']['content']
                             contexto += audio_tratado + "\n" + retorno + "\n"
-                            label_jarvis.setText("Jarvis: "+retorno)
+                            label_jarvis.setText(retorno)
                             print(retorno)
-                            Classes.voices.Voices.speak(retorno)
+                            voice.speak(retorno)
                         except:
                             print("Erro... Openai não respondendo...")
-                            Classes.voices.Voices.speak("Erro... Openai não respondendo...")
+                            voice.speak("Erro... Openai não respondendo...")
 
                     inserir_logs(audio_tratado, retorno)
                 
@@ -672,7 +699,7 @@ def init():
     app = QApplication(sys.argv)
 
     initt = QMainWindow()
-    initt.setWindowTitle("Inicialização")
+    initt.setWindowTitle("Inicializacao")
     initt.setWindowState(initt.windowState() | QtCore.Qt.WindowFullScreen)
 
     # Define a cor de fundo como preto
@@ -727,8 +754,9 @@ def init():
     initt.activateWindow()  # Traz a janela para frente e a torna ativa
     movie.start()
 
+    aplicativo.app_na_frente("Inicializacao")
     app.exec()
-
+    
     return True
 
 
@@ -754,17 +782,17 @@ def info():
 if __name__ == "__main__":
 
     print("<<Verificação de identidade requisitada>>")
-    reproduzir_som.reproduzir_som(r"Sons\Vozes\Verificação de identidade requisitada.mp3")
+    #reproduzir_som.reproduzir_som(r"Sons\Vozes\Verificação de identidade requisitada.mp3")
     print("<<Iniciando reconhecimento facial>>")
-    reproduzir_som.reproduzir_som(r"Sons\Vozes\Iniciando reconhecimento facial.mp3")
+    #reproduzir_som.reproduzir_som(r"Sons\Vozes\Iniciando reconhecimento facial.mp3")
     
-    if Classes.ReconhecimentoFacial.ReconhecimentoFacial.global_reconhecimento_facial():
-    #if True:
+    #if Classes.ReconhecimentoFacial.ReconhecimentoFacial.global_reconhecimento_facial():
+    if True:
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
         print("Verificação de identidade Bem Sussedida, Bem vindo Matheus")
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
-        reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_reconhecimento_facial_bem_sussedido.mp3")
-        reproduzir_som.reproduzir_som(r"Sons\Vozes\Verificação de identidade Bem Sussedida Bem vindo Matheus.mp3")
+        #reproduzir_som.reproduzir_som(r"Sons\Beeps\Beep_reconhecimento_facial_bem_sussedido.mp3")
+        #reproduzir_som.reproduzir_som(r"Sons\Vozes\Verificação de identidade Bem Sussedida Bem vindo Matheus.mp3")
 
         # Inicia a função code para o back-end
         thread_code = threading.Thread(target=code)
@@ -779,7 +807,7 @@ if __name__ == "__main__":
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
         print("Verificação de identidade Mal Sussedida, Por favor fale com o Administrador do sistema")
         print("@+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++@")
-        Classes.voices.Voices.speak("Verificação de identidade Mal Sussedida, Por favor fale com o Administrador do sistema!")
+        voice.speak("Verificação de identidade Mal Sussedida, Por favor fale com o Administrador do sistema!")
         exit()
     
 
